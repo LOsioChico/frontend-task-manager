@@ -3,14 +3,15 @@ import { TaskForm } from "../components/TaskForm";
 import { useTaskContext } from "../context/TaskContext";
 import { TaskFilter } from "../types/task";
 import { Button } from "../components/ui/Button";
+import { FaTasks, FaCheck, FaClock } from "react-icons/fa";
 
 const Home = () => {
   const { filter, setFilter } = useTaskContext();
 
-  const filters: { label: string; value: TaskFilter }[] = [
-    { label: "All Tasks", value: "all" },
-    { label: "Pending", value: "pending" },
-    { label: "Completed", value: "completed" },
+  const filters: { label: string; value: TaskFilter; icon: JSX.Element }[] = [
+    { label: "All Tasks", value: "all", icon: <FaTasks className="w-4 h-4" /> },
+    { label: "Pending", value: "pending", icon: <FaClock className="w-4 h-4" /> },
+    { label: "Completed", value: "completed", icon: <FaCheck className="w-4 h-4" /> },
   ];
 
   return (
@@ -25,9 +26,15 @@ const Home = () => {
         <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
           <h2 className="text-lg font-medium text-gray-700 mb-3">Filter Tasks</h2>
           <div className="flex flex-wrap gap-2">
-            {filters.map(({ label, value }) => (
-              <Button key={value} variant={filter === value ? "primary" : "secondary"} onClick={() => setFilter(value)}>
-                {label}
+            {filters.map(({ label, value, icon }) => (
+              <Button
+                key={value}
+                variant={filter === value ? "primary" : "secondary"}
+                onClick={() => setFilter(value)}
+                className="flex items-center space-x-2"
+              >
+                {icon}
+                <span>{label}</span>
               </Button>
             ))}
           </div>
