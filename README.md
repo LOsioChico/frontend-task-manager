@@ -2,6 +2,10 @@
 
 Frontend application for a Task Management system built with React, TypeScript, and Tailwind CSS. This project is part of a full-stack technical assessment.
 
+## Live Demo
+
+https://frontend-task-manager-zeta.vercel.app/
+
 ## Project Overview
 
 This React application provides a modern and intuitive task management interface that allows users to:
