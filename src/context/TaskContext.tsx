@@ -36,7 +36,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       setTasks(response.data);
       setError(null);
     } catch {
-      setError("Error fetching tasks, possible rate limit reached");
+      setError("Error fetching tasks");
     } finally {
       setIsLoading(false);
     }
@@ -49,7 +49,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       await fetchTasks();
       setError(null);
     } catch {
-      setError("Error creating task, possible rate limit reached");
+      setError("Error creating task");
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +62,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       await fetchTasks();
       setError(null);
     } catch {
-      setError("Error updating task, possible rate limit reached");
+      setError("Error updating task");
     } finally {
       setIsLoading(false);
     }
@@ -75,7 +75,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       await fetchTasks();
       setError(null);
     } catch {
-      setError("Error deleting task, possible rate limit reached");
+      setError("Error deleting task");
     } finally {
       setIsLoading(false);
     }
