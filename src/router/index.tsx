@@ -1,10 +1,14 @@
-import { createBrowserRouter } from "react-router";
-
+import { createBrowserRouter } from "react-router-dom";
+import { TaskProvider } from "../context/TaskContext";
 import Home from "../pages/Home";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <TaskProvider>
+        <Home />
+      </TaskProvider>
+    ),
   },
 ]);
