@@ -3,7 +3,7 @@ import { Task } from "../types/task";
 import { useTaskContext } from "../context/TaskContext";
 import { Button } from "./ui/Button";
 import { Modal } from "./ui/Modal";
-import { FaTrash, FaCheck } from "react-icons/fa";
+import { FaTrash, FaCheck, FaEdit } from "react-icons/fa";
 import { MdAccessTime } from "react-icons/md";
 
 interface TaskItemProps {
@@ -13,6 +13,9 @@ interface TaskItemProps {
 const TaskItem = ({ task }: TaskItemProps) => {
   const { updateTask, deleteTask, isLoading } = useTaskContext();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editTitle, setEditTitle] = useState(task.title);
+  const [editDescription, setEditDescription] = useState(task.description || "");
 
   const handleToggleComplete = () => {
     updateTask(task._id, { completed: !task.completed });
@@ -22,9 +25,25 @@ const TaskItem = ({ task }: TaskItemProps) => {
     setIsDeleteModalOpen(true);
   };
 
+  const handleEdit = () => {
+    setEditTitle(task.title);
+    setEditDescription(task.description || "");
+    setIsEditModalOpen(true);
+  };
+
   const handleConfirmDelete = () => {
     deleteTask(task._id);
     setIsDeleteModalOpen(false);
+  };
+
+  const handleConfirmEdit = () => {
+    if (editTitle.trim()) {
+      updateTask(task._id, {
+        title: editTitle.trim(),
+        description: editDescription.trim() || undefined,
+      });
+      setIsEditModalOpen(false);
+    }
   };
 
   return (
@@ -59,17 +78,19 @@ const TaskItem = ({ task }: TaskItemProps) => {
           </div>
         </div>
 
-        <Button
-          variant="danger"
-          onClick={handleDelete}
-          className="ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-          disabled={isLoading}
-        >
-          <FaTrash className="w-4 h-4" />
-          <span className="sr-only">Delete task</span>
-        </Button>
+        <div className="flex space-x-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <Button variant="secondary" onClick={handleEdit} disabled={isLoading}>
+            <FaEdit className="w-4 h-4" />
+            <span className="sr-only">Edit task</span>
+          </Button>
+          <Button variant="danger" onClick={handleDelete} disabled={isLoading}>
+            <FaTrash className="w-4 h-4" />
+            <span className="sr-only">Delete task</span>
+          </Button>
+        </div>
       </div>
 
+      {/* Delete Modal */}
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
@@ -77,6 +98,44 @@ const TaskItem = ({ task }: TaskItemProps) => {
         title="Delete Task"
         description={`Are you sure you want to delete "${task.title}"? This action cannot be undone.`}
         confirmText="Delete"
+        cancelText="Cancel"
+      />
+
+      {/* Edit Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onConfirm={handleConfirmEdit}
+        title="Edit Task"
+        description={
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="editTitle" className="block text-sm font-medium text-gray-700 mb-1">
+                Task Title *
+              </label>
+              <input
+                id="editTitle"
+                type="text"
+                value={editTitle}
+                onChange={(e) => setEditTitle(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="editDescription" className="block text-sm font-medium text-gray-700 mb-1">
+                Description (Optional)
+              </label>
+              <textarea
+                id="editDescription"
+                value={editDescription}
+                onChange={(e) => setEditDescription(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px]"
+              />
+            </div>
+          </div>
+        }
+        confirmText="Save Changes"
         cancelText="Cancel"
       />
     </>
