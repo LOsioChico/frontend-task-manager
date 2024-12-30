@@ -19,18 +19,17 @@ export const TaskList = () => {
 
   return (
     <div className="space-y-4 relative">
-      {isLoading && (
-        <>
-          <div className="text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            Loading...
-          </div>
-          <div className="absolute inset-0 bg-white opacity-50"></div>
-        </>
-      )}
+      {isLoading && <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-10" />}
 
-      {filteredTasks.map((task) => (
-        <TaskItem key={task._id} task={task} />
-      ))}
+      {filteredTasks.length === 0 ? (
+        <div className="text-center text-gray-500 py-8">
+          {filter === "all"
+            ? "No tasks found. Create one!"
+            : `No ${filter === "completed" ? "completed" : "pending"} tasks found.`}
+        </div>
+      ) : (
+        filteredTasks.map((task) => <TaskItem key={task._id} task={task} />)
+      )}
     </div>
   );
 };
